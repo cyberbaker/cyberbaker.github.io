@@ -1,0 +1,161 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import { AUTHOR_NAME, TRACK_LABELS } from '../consts';
+
+type Props = CollectionEntry<'blog'>['data'];
+
+const {
+	title,
+	description,
+	pubDate,
+	updatedDate,
+	heroImage,
+	track,
+	tags = [],
+	sources = [],
+	aiAssisted = false,
+} = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} image={heroImage} />
+		<style>
+			main {
+				width: calc(100% - 2em);
+				max-width: 100%;
+				margin: 0;
+			}
+			.hero-image {
+				width: 100%;
+			}
+			.hero-image img {
+				display: block;
+				margin: 0 auto;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+			}
+			.prose {
+				width: 720px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 1em;
+				color: rgb(var(--gray-dark));
+			}
+			.title {
+				margin-bottom: 1em;
+				padding: 1em 0;
+				line-height: 1;
+			}
+			.title h1 {
+				margin: 0.25em 0 0.5em 0;
+				font-size: 2.4em;
+			}
+			.meta {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.75em;
+				align-items: center;
+				font-size: 0.8em;
+				color: rgb(var(--gray));
+			}
+			.last-updated-on {
+				font-style: italic;
+			}
+			.post-footer {
+				margin-top: 3em;
+				padding-top: 1em;
+				border-top: 1px solid rgb(var(--gray-light));
+				font-size: 0.85em;
+			}
+			.post-footer h2 {
+				font-size: 1.2em;
+			}
+			.tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5em;
+				list-style: none;
+				padding: 0;
+			}
+			.tags li {
+				background: rgb(var(--gray-light));
+				border-radius: 4px;
+				padding: 0 0.5em;
+			}
+			.disclosure {
+				color: rgb(var(--gray));
+				font-style: italic;
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<article>
+				<div class="hero-image">
+					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+				</div>
+				<div class="prose">
+					<div class="title">
+						<div class="meta">
+							<FormattedDate date={pubDate} />
+							{track && <span class:list={['track', track]}>{TRACK_LABELS[track]}</span>}
+							{
+								updatedDate && (
+									<span class="last-updated-on">
+										Updated <FormattedDate date={updatedDate} />
+									</span>
+								)
+							}
+						</div>
+						<h1>{title}</h1>
+						<hr />
+					</div>
+					<slot />
+					{
+						(sources.length > 0 || tags.length > 0 || aiAssisted) && (
+							<footer class="post-footer">
+								{sources.length > 0 && (
+									<>
+										<h2>Sources</h2>
+										<ul>
+											{sources.map((s) => (
+												<li>
+													<a href={s.url} rel="noopener" target="_blank">
+														{s.title}
+													</a>
+													{s.publisher && <> ({s.publisher})</>}
+												</li>
+											))}
+										</ul>
+									</>
+								)}
+								{tags.length > 0 && (
+									<ul class="tags">
+										{tags.map((t) => (
+											<li>{t}</li>
+										))}
+									</ul>
+								)}
+								{aiAssisted && (
+									<p class="disclosure">
+										Researched and drafted by {AUTHOR_NAME} with the help of a locally run AI model, using
+										the sources above, and checked against them before publishing.
+									</p>
+								)}
+							</footer>
+						)
+					}
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>

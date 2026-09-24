@@ -1,0 +1,48 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import PostList from '../components/PostList.astro';
+import { SITE_DESCRIPTION, SITE_TAGLINE, SITE_TITLE } from '../consts';
+import { getPublishedPosts } from '../posts';
+
+const latest = (await getPublishedPosts()).slice(0, 6);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`${SITE_TITLE} | ${SITE_TAGLINE}`} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="intro">
+				<h1>{SITE_TAGLINE}</h1>
+				<p>{SITE_DESCRIPTION}</p>
+				<p class="tracks">
+					<span class="track everyday">Everyday security</span> posts explain what happened and what it
+					means for you. <span class="track deep-dive">Deep dive</span> posts go under the hood for people
+					who defend systems.
+				</p>
+			</section>
+			<h2 class="latest">Latest</h2>
+			<PostList posts={latest} />
+			<p><a href={`${import.meta.env.BASE_URL}blog/`}>All posts &rarr;</a></p>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.intro h1 {
+		font-size: 2.4em;
+	}
+	.tracks {
+		font-size: 0.9em;
+	}
+	.latest {
+		font-size: 1.4em;
+		margin-top: 1.5em;
+	}
+</style>
