@@ -1,0 +1,21 @@
+---
+// Brand mark: the chef's hat and shield icon (src/assets/logo.png, made by scripts/logo.mjs).
+// Decorative; the site name always sits beside it. Designed for dark backgrounds.
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
+
+interface Props {
+	size?: number; // rendered height in px
+}
+const { size = 44 } = Astro.props;
+---
+
+<Image src={logo} alt="" height={size} densities={[1, 2]} loading="eager" class="logo" />
+
+<style>
+	.logo {
+		display: block;
+		width: auto;
+		flex-shrink: 0;
+	}
+</style>

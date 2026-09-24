@@ -1,24 +1,47 @@
 ---
-import Layout from '../layouts/BlogPost.astro';
-import { AUTHOR_NAME } from '../consts';
+import PageHeader from '../components/PageHeader.astro';
+import { AUTHOR_NAME, LINKEDIN_URL, SITE_TITLE } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL;
+const description = `About ${SITE_TITLE} and the person who writes it.`;
 ---
 
-<Layout
-	title="About"
-	description={`About ${AUTHOR_NAME} and this blog.`}
-	pubDate={new Date('2026-09-23')}
->
-	<p>
-		The Cyber Baker is written by a UK-based security architect with more than ten years in cyber security. Most of that time has been spent designing and assuring secure systems, with a particular focus on cloud security, threat modelling and risk. The author also holds CISSP, CEH and Security+ certifications and membership of The Security Institute.
-
-The blog exists because good security analysis is often hard to find. News coverage tends to skip the technical detail that matters, while specialist write-ups can be impenetrable to anyone outside the field. The Cyber Baker aims to sit in between: each post looks at what happened, how the attack worked, who was behind it and what it means in practice.
-
-Posts are produced with the help of AI tools and are curated, reviewed and published by the author. If you spot an error or think something has been missed, get in touch; corrections are always welcome.
-
-Views expressed here are the author's own and do not represent any employer.
-	</p>
-	<p>
-		Posts are researched from reputable news outlets, security vendors and government agencies, and every
-		post links to its sources so you can read further.
-	</p>
-</Layout>
+<BaseLayout title="About" description={description}>
+	<PageHeader title={`About ${SITE_TITLE}`} lead="Security analysis that sits between the headlines and the specialist write-ups." crumbs={[{ label: 'Home', href: base }, { label: 'About' }]} />
+	<div class="container section">
+		<div class="prose">
+			<p>
+				The Cyber Baker is written by a UK-based security architect with more than ten years in cyber security.
+				Most of that time has been spent designing and assuring secure systems, with a particular focus on cloud
+				security, threat modelling and risk. The author also holds CISSP, CEH and Security+ certifications and
+				membership of The Security Institute.
+			</p>
+			<p>
+				The blog exists because good security analysis is often hard to find. News coverage tends to skip the
+				technical detail that matters, while specialist write-ups can be impenetrable to anyone outside the field.
+				The Cyber Baker aims to sit in between: each post looks at what happened, how the attack worked, who was
+				behind it and what it means in practice.
+			</p>
+			<h2>How posts are made</h2>
+			<p>
+				Posts are researched from reputable news outlets, security vendors and government agencies, and every post
+				links to its sources so you can read further.
+			</p>
+			<p>
+				Posts are produced with the help of AI tools and are curated, reviewed and published by the author. If you
+				spot an error or think something has been missed, get in touch; corrections are always welcome.
+			</p>
+			<p>Views expressed here are the author's own and do not represent any employer.</p>
+			{
+				LINKEDIN_URL && (
+					<p>
+						<a href={LINKEDIN_URL} target="_blank" rel="noopener">
+							Connect with {AUTHOR_NAME} on LinkedIn
+						</a>
+					</p>
+				)
+			}
+		</div>
+	</div>
+</BaseLayout>

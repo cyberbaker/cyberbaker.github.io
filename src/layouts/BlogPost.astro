@@ -1,161 +1,295 @@
 ---
-import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
+import type { MarkdownHeading } from 'astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
-import { AUTHOR_NAME, TRACK_LABELS } from '../consts';
+import PageHeader from '../components/PageHeader.astro';
+import PostCard from '../components/PostCard.astro';
+import { AUTHOR_NAME, TRACKS } from '../consts';
+import { type Post, readingMinutes } from '../posts';
+import BaseLayout from './BaseLayout.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+interface Props {
+	post: Post;
+	headings: MarkdownHeading[];
+	related: Post[];
+}
 
-const {
-	title,
-	description,
-	pubDate,
-	updatedDate,
-	heroImage,
-	track,
-	tags = [],
-	sources = [],
-	aiAssisted = false,
-} = Astro.props;
+const { post, headings, related } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, track, tags, sources, aiAssisted } = post.data;
+const base = import.meta.env.BASE_URL;
+const toc = headings.filter((h) => h.depth === 2);
+const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const section = track
+	? { label: track === 'deep-dive' ? 'Deep dives' : TRACKS[track].label, href: `${base}${TRACKS[track].path}` }
+	: { label: 'All posts', href: `${base}blog/` };
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description} image={heroImage} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
+<BaseLayout
+	title={title}
+	description={description}
+	image={heroImage}
+	type="article"
+	publishedTime={pubDate}
+	section={track ? TRACKS[track].path : 'blog/'}
+>
+	<PageHeader
+		title={title}
+		lead={description}
+		eyebrow={track ? TRACKS[track].label : undefined}
+		eyebrowClass={track ? `track ${track}` : undefined}
+		crumbs={[{ label: 'Home', href: base }, section, { label: title }]}
+	>
+		<p class="byline">
+			<span>By {AUTHOR_NAME}</span>
+			<span aria-hidden="true">·</span>
+			<FormattedDate date={pubDate} />
+			<span aria-hidden="true">·</span>
+			<span>{readingMinutes(post)} min read</span>
+			{
+				updatedDate && (
+					<>
+						<span aria-hidden="true">·</span>
+						<span>
+							Updated <FormattedDate date={updatedDate} />
+						</span>
+					</>
+				)
 			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0.25em 0 0.5em 0;
-				font-size: 2.4em;
-			}
-			.meta {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.75em;
-				align-items: center;
-				font-size: 0.8em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-			.post-footer {
-				margin-top: 3em;
-				padding-top: 1em;
-				border-top: 1px solid rgb(var(--gray-light));
-				font-size: 0.85em;
-			}
-			.post-footer h2 {
-				font-size: 1.2em;
-			}
-			.tags {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.5em;
-				list-style: none;
-				padding: 0;
-			}
-			.tags li {
-				background: rgb(var(--gray-light));
-				border-radius: 4px;
-				padding: 0 0.5em;
-			}
-			.disclosure {
-				color: rgb(var(--gray));
-				font-style: italic;
-			}
-		</style>
-	</head>
+		</p>
+	</PageHeader>
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="meta">
-							<FormattedDate date={pubDate} />
-							{track && <span class:list={['track', track]}>{TRACK_LABELS[track]}</span>}
-							{
-								updatedDate && (
-									<span class="last-updated-on">
-										Updated <FormattedDate date={updatedDate} />
-									</span>
-								)
-							}
+	<div class="container article-layout">
+		{
+			toc.length > 1 && (
+				<aside class="toc" aria-labelledby="toc-heading">
+					<details open>
+						<summary id="toc-heading">On this page</summary>
+						<ol>
+							{toc.map((h) => (
+								<li>
+									<a href={`#${h.slug}`}>{h.text}</a>
+								</li>
+							))}
+						</ol>
+					</details>
+				</aside>
+			)
+		}
+
+		<article class="article">
+			<div class="prose">
+				<slot />
+			</div>
+
+			{
+				sources.length > 0 && (
+					<section class="sources" aria-labelledby="sources-heading">
+						<h2 id="sources-heading">Sources</h2>
+						<ol>
+							{sources.map((s) => (
+								<li>
+									<a href={s.url} rel="noopener" target="_blank">
+										{s.title}
+									</a>
+									{s.publisher && <span class="publisher">{s.publisher}</span>}
+								</li>
+							))}
+						</ol>
+					</section>
+				)
+			}
+
+			<div class="post-footer">
+				{
+					tags.length > 0 && (
+						<div class="tags">
+							<h2 class="sr-only">Topics</h2>
+							<ul>
+								{tags.map((t) => (
+									<li>{t}</li>
+								))}
+							</ul>
 						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-					{
-						(sources.length > 0 || tags.length > 0 || aiAssisted) && (
-							<footer class="post-footer">
-								{sources.length > 0 && (
-									<>
-										<h2>Sources</h2>
-										<ul>
-											{sources.map((s) => (
-												<li>
-													<a href={s.url} rel="noopener" target="_blank">
-														{s.title}
-													</a>
-													{s.publisher && <> ({s.publisher})</>}
-												</li>
-											))}
-										</ul>
-									</>
-								)}
-								{tags.length > 0 && (
-									<ul class="tags">
-										{tags.map((t) => (
-											<li>{t}</li>
-										))}
-									</ul>
-								)}
-								{aiAssisted && (
-									<p class="disclosure">
-										Researched and drafted by {AUTHOR_NAME} with the help of a locally run AI model, using
-										the sources above, and checked against them before publishing.
-									</p>
-								)}
-							</footer>
-						)
-					}
+					)
+				}
+				<div class="share">
+					<span>Share:</span>
+					<a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`} target="_blank" rel="noopener">
+						LinkedIn
+					</a>
+					<a href={`mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(pageUrl)}`}>Email</a>
 				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
-</html>
+			</div>
+
+			{
+				aiAssisted && (
+					<p class="disclosure">
+						This post was researched and drafted with the help of a locally run AI model, using the sources
+						listed above, and checked against them before publishing. Spotted an error? Corrections are always
+						welcome.
+					</p>
+				)
+			}
+		</article>
+	</div>
+
+	{
+		related.length > 0 && (
+			<section class="section section--alt">
+				<div class="container">
+					<div class="section-heading">
+						<h2>Related posts</h2>
+						<a href={section.href}>More {section.label.toLowerCase()}</a>
+					</div>
+					<ul class="card-grid">
+						{related.map((p) => (
+							<PostCard post={p} />
+						))}
+					</ul>
+				</div>
+			</section>
+		)
+	}
+</BaseLayout>
+
+<style>
+	.byline {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin: 1.25rem 0 0;
+		font-size: 0.9375rem;
+		color: var(--ink-muted);
+	}
+	.article-layout {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 16rem;
+		grid-template-areas: 'article toc';
+		gap: 4rem;
+		padding-block: 2.5rem 3.5rem;
+	}
+	.article {
+		grid-area: article;
+		min-width: 0;
+		max-width: var(--measure);
+	}
+	.toc {
+		grid-area: toc;
+		align-self: start;
+		position: sticky;
+		top: 1.5rem;
+		font-size: 0.9375rem;
+	}
+	.toc summary {
+		font-weight: 700;
+		color: var(--navy-900);
+		padding-bottom: 0.6rem;
+		border-bottom: 3px solid var(--navy-900);
+		list-style: none;
+		cursor: default;
+	}
+	.toc summary::-webkit-details-marker {
+		display: none;
+	}
+	.toc ol {
+		list-style: none;
+		margin: 0.75rem 0 0;
+		padding: 0;
+	}
+	.toc li {
+		padding: 0.35rem 0 0.35rem 0.75rem;
+		border-left: 2px solid var(--line);
+		line-height: 1.4;
+	}
+	.toc li:hover {
+		border-left-color: var(--teal-600);
+	}
+	.toc a {
+		color: var(--ink);
+		text-decoration: none;
+	}
+	.toc a:hover {
+		color: var(--teal-700);
+		text-decoration: underline;
+	}
+	.sources {
+		margin-top: 3rem;
+		padding: 1.25rem 1.5rem;
+		background: var(--surface-alt);
+		border-left: 4px solid var(--teal-600);
+	}
+	.sources h2 {
+		font-size: 1.125rem;
+		margin-bottom: 0.75rem;
+	}
+	.sources ol {
+		margin: 0;
+		padding-left: 1.25rem;
+		font-size: 0.9688rem;
+	}
+	.sources li + li {
+		margin-top: 0.5rem;
+	}
+	.publisher {
+		display: block;
+		font-size: 0.8125rem;
+		color: var(--ink-subtle);
+	}
+	.post-footer {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1rem;
+		margin-top: 2rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--line);
+	}
+	.tags ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.tags li {
+		padding: 0.15rem 0.6rem;
+		font-size: 0.8125rem;
+		color: var(--ink-muted);
+		background: var(--surface-alt);
+		border: 1px solid var(--line);
+		border-radius: 999px;
+	}
+	.share {
+		display: flex;
+		gap: 1rem;
+		font-size: 0.9375rem;
+	}
+	.share span {
+		color: var(--ink-subtle);
+	}
+	.disclosure {
+		margin-top: 1.5rem;
+		font-size: 0.875rem;
+		color: var(--ink-subtle);
+	}
+	@media (max-width: 1024px) {
+		.article-layout {
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-areas: 'toc' 'article';
+			gap: 1.5rem;
+		}
+		.toc {
+			position: static;
+			max-width: var(--measure);
+			padding: 1rem 1.25rem;
+			background: var(--surface-alt);
+			border: 1px solid var(--line);
+		}
+		.toc summary {
+			cursor: pointer;
+			border-bottom: 0;
+			padding-bottom: 0;
+		}
+	}
+</style>

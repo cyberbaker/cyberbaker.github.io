@@ -1,0 +1,9 @@
+---
+import PostListing from '../components/PostListing.astro';
+import { TRACKS } from '../consts';
+import { getPublishedPosts } from '../posts';
+
+const posts = (await getPublishedPosts()).filter((p) => p.data.track === 'everyday');
+---
+
+<PostListing title={TRACKS.everyday.label} lead={TRACKS.everyday.summary} posts={posts} current="everyday" />

@@ -1,0 +1,89 @@
+---
+import { TRACKS } from '../consts';
+import { type Post, postUrl, readingMinutes } from '../posts';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	post: Post;
+	headingLevel?: 'h2' | 'h3';
+}
+const { post, headingLevel: Heading = 'h3' } = Astro.props;
+const { title, description, pubDate, track } = post.data;
+---
+
+<li class:list={['card', track]}>
+	{track && <p class:list={['track', track]}>{TRACKS[track].label}</p>}
+	<Heading class="card-title">
+		<a href={postUrl(post)}>{title}</a>
+	</Heading>
+	<p class="card-summary">{description}</p>
+	<p class="card-meta">
+		<FormattedDate date={pubDate} />
+		<span aria-hidden="true">·</span>
+		<span>{readingMinutes(post)} min read</span>
+	</p>
+</li>
+
+<style>
+	.card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		padding: 1.25rem 1.25rem 1rem;
+		background: var(--surface);
+		border: 1px solid var(--line);
+		border-top: 4px solid var(--navy-700);
+		border-radius: var(--radius);
+		transition:
+			box-shadow 0.15s ease,
+			border-color 0.15s ease;
+	}
+	.card.everyday {
+		border-top-color: var(--everyday);
+	}
+	.card.deep-dive {
+		border-top-color: var(--deep-dive);
+	}
+	.card:hover {
+		box-shadow: var(--shadow);
+		border-color: var(--line-strong);
+	}
+	.track {
+		margin: 0 0 0.6rem;
+	}
+	.card-title {
+		font-size: 1.1875rem;
+		line-height: 1.35;
+		margin: 0 0 0.6rem;
+	}
+	.card-title a {
+		color: var(--navy-900);
+		text-decoration: none;
+	}
+	/* Whole card is clickable, but only the title is announced as the link. */
+	.card-title a::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+	}
+	.card:hover .card-title a {
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+	}
+	.card-summary {
+		color: var(--ink-muted);
+		font-size: 0.9688rem;
+		line-height: 1.55;
+		margin: 0 0 1rem;
+		flex: 1;
+	}
+	.card-meta {
+		display: flex;
+		gap: 0.5rem;
+		margin: 0;
+		padding-top: 0.75rem;
+		border-top: 1px solid var(--line);
+		font-size: 0.8125rem;
+		color: var(--ink-subtle);
+	}
+</style>

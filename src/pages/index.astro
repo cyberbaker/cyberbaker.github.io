@@ -1,48 +1,208 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import PostList from '../components/PostList.astro';
-import { SITE_DESCRIPTION, SITE_TAGLINE, SITE_TITLE } from '../consts';
-import { getPublishedPosts } from '../posts';
+import FormattedDate from '../components/FormattedDate.astro';
+import PostCard from '../components/PostCard.astro';
+import { SITE_DESCRIPTION, SITE_TAGLINE, SITE_TITLE, TRACKS } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublishedPosts, postUrl, readingMinutes } from '../posts';
 
-const latest = (await getPublishedPosts()).slice(0, 6);
+const base = import.meta.env.BASE_URL;
+const posts = await getPublishedPosts();
+const [featured, ...rest] = posts;
+const latest = rest.slice(0, 6);
+const counts = {
+	everyday: posts.filter((p) => p.data.track === 'everyday').length,
+	'deep-dive': posts.filter((p) => p.data.track === 'deep-dive').length,
+};
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={`${SITE_TITLE} | ${SITE_TAGLINE}`} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section class="intro">
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<section class="hero">
+		<div class="container hero-inner">
+			<div>
 				<h1>{SITE_TAGLINE}</h1>
-				<p>{SITE_DESCRIPTION}</p>
-				<p class="tracks">
-					<span class="track everyday">Everyday security</span> posts explain what happened and what it
-					means for you. <span class="track deep-dive">Deep dive</span> posts go under the hood for people
-					who defend systems.
-				</p>
+				<p class="hero-lead">{SITE_DESCRIPTION}</p>
+			</div>
+			<ul class="pathways">
+				{
+					(['everyday', 'deep-dive'] as const).map((t) => (
+						<li>
+							<a href={`${base}${TRACKS[t].path}`} class:list={['pathway', t]}>
+								<span class="pathway-title">{t === 'deep-dive' ? 'Deep dives' : TRACKS[t].label}</span>
+								<span class="pathway-text">{TRACKS[t].summary}</span>
+								<span class="pathway-count">
+									{counts[t]} {counts[t] === 1 ? 'post' : 'posts'}
+								</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</section>
+
+	{
+		featured && (
+			<section class="section">
+				<div class="container">
+					<div class="section-heading">
+						<h2>Latest</h2>
+					</div>
+					<article class="featured">
+						{featured.data.track && (
+							<p class:list={['track', featured.data.track]}>{TRACKS[featured.data.track].label}</p>
+						)}
+						<h3 class="featured-title">
+							<a href={postUrl(featured)}>{featured.data.title}</a>
+						</h3>
+						<p class="featured-summary">{featured.data.description}</p>
+						<p class="featured-meta">
+							<FormattedDate date={featured.data.pubDate} /> · {readingMinutes(featured)} min read
+						</p>
+					</article>
+				</div>
 			</section>
-			<h2 class="latest">Latest</h2>
-			<PostList posts={latest} />
-			<p><a href={`${import.meta.env.BASE_URL}blog/`}>All posts &rarr;</a></p>
-		</main>
-		<Footer />
-	</body>
-</html>
+		)
+	}
+
+	{
+		latest.length > 0 && (
+			<section class="section section--alt">
+				<div class="container">
+					<div class="section-heading">
+						<h2>Recent posts</h2>
+						<a href={`${base}blog/`}>View all posts</a>
+					</div>
+					<ul class="card-grid">
+						{latest.map((post) => (
+							<PostCard post={post} />
+						))}
+					</ul>
+				</div>
+			</section>
+		)
+	}
+
+	{
+		!featured && (
+			<section class="section">
+				<div class="container">
+					<p>The first posts are on their way. Check back soon.</p>
+				</div>
+			</section>
+		)
+	}
+</BaseLayout>
 
 <style>
-	.intro h1 {
-		font-size: 2.4em;
+	.hero {
+		background:
+			radial-gradient(circle at 85% 0%, rgba(11, 127, 137, 0.35), transparent 55%),
+			var(--navy-800);
+		color: #fff;
+		padding-block: clamp(2.5rem, 6vw, 4.5rem);
 	}
-	.tracks {
-		font-size: 0.9em;
+	.hero-inner {
+		display: grid;
+		grid-template-columns: 1.3fr 1fr;
+		gap: clamp(2rem, 5vw, 4rem);
+		align-items: center;
 	}
-	.latest {
-		font-size: 1.4em;
-		margin-top: 1.5em;
+	.hero h1 {
+		color: #fff;
+		font-size: clamp(2rem, 1.3rem + 2.6vw, 3rem);
+		max-width: 18ch;
+	}
+	.hero-lead {
+		font-size: 1.1875rem;
+		line-height: 1.6;
+		color: #d2dde8;
+		max-width: 38rem;
+		margin: 0;
+	}
+	.pathways {
+		display: grid;
+		gap: 1rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.pathway {
+		display: grid;
+		gap: 0.25rem;
+		padding: 1.1rem 3rem 1.1rem 1.25rem;
+		position: relative;
+		background: #fff;
+		color: var(--ink);
+		text-decoration: none;
+		border-left: 6px solid var(--everyday);
+		border-radius: var(--radius);
+	}
+	.pathway.deep-dive {
+		border-left-color: var(--deep-dive);
+	}
+	.pathway::after {
+		content: '';
+		position: absolute;
+		right: 1.25rem;
+		top: 50%;
+		width: 0.6rem;
+		height: 0.6rem;
+		border-top: 2.5px solid var(--navy-900);
+		border-right: 2.5px solid var(--navy-900);
+		transform: translateY(-50%) rotate(45deg);
+		transition: right 0.15s ease;
+	}
+	.pathway:hover::after {
+		right: 1rem;
+	}
+	.pathway-title {
+		font-weight: 700;
+		font-size: 1.125rem;
+		color: var(--navy-900);
+	}
+	.pathway:hover .pathway-title {
+		text-decoration: underline;
+	}
+	.pathway-text {
+		font-size: 0.9375rem;
+		color: var(--ink-muted);
+	}
+	.pathway-count {
+		font-size: 0.8125rem;
+		color: var(--ink-subtle);
+		margin-top: 0.25rem;
+	}
+	.featured {
+		max-width: 52rem;
+	}
+	.featured .track {
+		margin-bottom: 0.5rem;
+	}
+	.featured-title {
+		font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.125rem);
+		line-height: 1.2;
+		margin-bottom: 0.6rem;
+	}
+	.featured-title a {
+		color: var(--navy-900);
+		text-decoration: none;
+	}
+	.featured-title a:hover {
+		text-decoration: underline;
+	}
+	.featured-summary {
+		font-size: 1.1875rem;
+		color: var(--ink-muted);
+		margin-bottom: 0.75rem;
+	}
+	.featured-meta {
+		font-size: 0.875rem;
+		color: var(--ink-subtle);
+		margin: 0;
+	}
+	@media (max-width: 860px) {
+		.hero-inner {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

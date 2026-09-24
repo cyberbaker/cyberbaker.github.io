@@ -10,8 +10,21 @@ export const AUTHOR_NAME = 'Cyberbaker';
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/ben-baker-913643170/';
 export const GITHUB_URL = '';
 
-// Human-readable labels for the two kinds of post the pipeline writes.
+// The two kinds of post the pipeline writes. `path` is the section page listing them.
+export const TRACKS = {
+	everyday: {
+		label: 'Everyday security',
+		path: 'everyday-security/',
+		summary: 'What happened, why it matters and what to do about it, in plain English.',
+	},
+	'deep-dive': {
+		label: 'Deep dive',
+		path: 'deep-dives/',
+		summary: 'How attacks work under the hood, and what defenders should do next.',
+	},
+} as const;
+
 export const TRACK_LABELS = {
-	everyday: 'Everyday security',
-	'deep-dive': 'Deep dive',
+	everyday: TRACKS.everyday.label,
+	'deep-dive': TRACKS['deep-dive'].label,
 } as const;

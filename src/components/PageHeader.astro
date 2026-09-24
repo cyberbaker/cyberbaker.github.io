@@ -1,0 +1,79 @@
+---
+// Title band at the top of every page: optional breadcrumbs, heading, lead paragraph.
+interface Crumb {
+	label: string;
+	href?: string;
+}
+interface Props {
+	title: string;
+	lead?: string;
+	crumbs?: Crumb[];
+	eyebrow?: string;
+	eyebrowClass?: string;
+}
+const { title, lead, crumbs = [], eyebrow, eyebrowClass } = Astro.props;
+---
+
+<div class="page-header">
+	<div class="container">
+		{
+			crumbs.length > 0 && (
+				<nav class="breadcrumbs" aria-label="Breadcrumb">
+					<ol>
+						{crumbs.map((c) => (
+							<li>{c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>
+						))}
+					</ol>
+				</nav>
+			)
+		}
+		{eyebrow && <p class:list={['eyebrow', eyebrowClass]}>{eyebrow}</p>}
+		<h1>{title}</h1>
+		{lead && <p class="lead">{lead}</p>}
+		<slot />
+	</div>
+</div>
+
+<style>
+	.page-header {
+		background: var(--surface-alt);
+		border-bottom: 1px solid var(--line);
+		padding-block: 1.5rem 2.25rem;
+	}
+	.breadcrumbs ol {
+		display: flex;
+		flex-wrap: wrap;
+		list-style: none;
+		margin: 0 0 1.5rem;
+		padding: 0;
+		font-size: 0.875rem;
+		color: var(--ink-muted);
+	}
+	.breadcrumbs li + li::before {
+		content: '';
+		display: inline-block;
+		width: 0.4em;
+		height: 0.4em;
+		margin: 0 0.65em 0.1em 0.5em;
+		border-top: 1.5px solid var(--ink-subtle);
+		border-right: 1.5px solid var(--ink-subtle);
+		transform: rotate(45deg);
+	}
+	.breadcrumbs a {
+		color: var(--ink);
+	}
+	.eyebrow {
+		margin: 0 0 0.5rem;
+	}
+	h1 {
+		max-width: 52rem;
+		margin-bottom: 0.4em;
+	}
+	.lead {
+		max-width: 46rem;
+		margin: 0;
+		font-size: 1.25rem;
+		line-height: 1.55;
+		color: var(--ink-muted);
+	}
+</style>

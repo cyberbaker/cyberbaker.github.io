@@ -1,0 +1,85 @@
+---
+// A page listing posts: title band with section tabs, then a card grid.
+import { TRACKS } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { Post } from '../posts';
+import PageHeader from './PageHeader.astro';
+import PostCard from './PostCard.astro';
+
+interface Props {
+	title: string;
+	lead: string;
+	posts: Post[];
+	current: 'all' | keyof typeof TRACKS;
+}
+const { title, lead, posts, current } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const tabs = [
+	{ key: 'all', label: 'All posts', href: `${base}blog/` },
+	{ key: 'everyday', label: TRACKS.everyday.label, href: `${base}${TRACKS.everyday.path}` },
+	{ key: 'deep-dive', label: 'Deep dives', href: `${base}${TRACKS['deep-dive'].path}` },
+];
+---
+
+<BaseLayout title={title} description={lead}>
+	<PageHeader title={title} lead={lead} crumbs={[{ label: 'Home', href: base }, { label: title }]} />
+	<div class="container section">
+		<nav class="tabs" aria-label="Filter posts">
+			{
+				tabs.map((t) => (
+					<a href={t.href} aria-current={t.key === current ? 'page' : undefined}>
+						{t.label}
+					</a>
+				))
+			}
+		</nav>
+		<p class="count">{`${posts.length} ${posts.length === 1 ? 'post' : 'posts'}`}</p>
+		{
+			posts.length > 0 ? (
+				<ul class="card-grid">
+					{posts.map((post) => (
+						<PostCard post={post} headingLevel="h2" />
+					))}
+				</ul>
+			) : (
+				<p>No posts here yet. Check back soon.</p>
+			)
+		}
+	</div>
+</BaseLayout>
+
+<style>
+	.tabs {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		border-bottom: 1px solid var(--line);
+		margin-bottom: 1.25rem;
+	}
+	.tabs a {
+		padding: 0.6rem 1rem;
+		color: var(--ink);
+		font-weight: 500;
+		text-decoration: none;
+		border: 1px solid transparent;
+		border-bottom: none;
+		border-radius: var(--radius) var(--radius) 0 0;
+		margin-bottom: -1px;
+	}
+	.tabs a:hover {
+		color: var(--teal-700);
+		text-decoration: underline;
+	}
+	.tabs a[aria-current='page'] {
+		background: var(--surface);
+		border-color: var(--line);
+		border-top: 3px solid var(--teal-600);
+		font-weight: 600;
+		color: var(--navy-900);
+	}
+	.count {
+		font-size: 0.875rem;
+		color: var(--ink-subtle);
+		margin-bottom: 1rem;
+	}
+</style>

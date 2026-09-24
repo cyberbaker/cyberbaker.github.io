@@ -1,0 +1,9 @@
+---
+import PostListing from '../components/PostListing.astro';
+import { TRACKS } from '../consts';
+import { getPublishedPosts } from '../posts';
+
+const posts = (await getPublishedPosts()).filter((p) => p.data.track === 'deep-dive');
+---
+
+<PostListing title="Deep dives" lead={TRACKS['deep-dive'].summary} posts={posts} current="deep-dive" />
