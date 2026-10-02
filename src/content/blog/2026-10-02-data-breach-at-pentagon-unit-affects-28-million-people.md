@@ -9,7 +9,7 @@ sources:
     url: "https://techcrunch.com/2026/09/30/hackers-stole-millions-of-us-military-personnel-records-during-months-long-data-breach/"
     publisher: "Unknown"
 aiAssisted: true
-draft: true
+draft: false
 ---
 Approximately 2.8 million living people have had their personal information stolen in a data breach affecting the Pentagon. This theft includes current and former U.S. military service members and staff, as well as their families.
 
