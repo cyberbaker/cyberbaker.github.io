@@ -3,7 +3,7 @@
 //   after a push:  node scripts/share-to-linkedin.mjs --before <sha> --after <sha>
 //                  shares every post whose frontmatter changed from `draft: true` to `draft: false`
 //   on request:    node scripts/share-to-linkedin.mjs --post <slug>
-// Options: --dry-run (print instead of sending), --no-wait (don't wait for the page to go live).
+// Options: --dry-run (print instead of sending), --no-wait (skip the check that the post's page is live).
 // Needs the MAKE_WEBHOOK_URL environment variable (a GitHub repository secret).
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
@@ -78,18 +78,29 @@ function postsToShare() {
 	});
 }
 
-async function waitUntilLive(url) {
-	if (flag('no-wait') || dryRun) return true;
-	for (let i = 0; i < 40; i++) {
+// Checks the post's page before sharing, so LinkedIn never gets a broken link.
+//   live:    the page loads.
+//   blocked: a firewall or bot protection (e.g. Cloudflare) refused GitHub's automated check, so the page
+//            probably exists; shared with a warning.
+//   missing: 404, the site hasn't been rebuilt with this post yet.
+// After a push it keeps trying for up to 10 minutes while the site rebuilds; a manual share checks once.
+async function checkLive(url, attempts) {
+	let last = { state: 'unreachable', detail: 'no response' };
+	for (let i = 0; i < attempts; i++) {
 		try {
-			const r = await fetch(url, { method: 'GET', redirect: 'follow' });
-			if (r.ok) return true;
-		} catch {
-			/* not up yet */
+			const r = await fetch(url, {
+				redirect: 'follow',
+				headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CyberBakerShareBot/1.0; +https://github.com/cyberbaker)' },
+			});
+			if (r.ok) return { state: 'live', detail: `HTTP ${r.status}` };
+			if ([401, 403, 429, 503].includes(r.status)) return { state: 'blocked', detail: `HTTP ${r.status} from ${r.headers.get('server') || 'the server'}` };
+			last = { state: r.status === 404 || r.status === 410 ? 'missing' : 'unreachable', detail: `HTTP ${r.status}` };
+		} catch (e) {
+			last = { state: 'unreachable', detail: e.cause?.code || e.message };
 		}
-		await new Promise((res) => setTimeout(res, 15000));
+		if (i < attempts - 1) await new Promise((res) => setTimeout(res, 15000));
 	}
-	return false;
+	return last;
 }
 
 function buildPayload(path, site) {
@@ -128,10 +139,22 @@ for (const path of posts) {
 		console.log(`--- LinkedIn post (dry run, not sent) ---\n${payload.linkedInPost}`);
 		continue;
 	}
-	if (!(await waitUntilLive(payload.postUrl))) {
-		console.log(`::error::${payload.postUrl} did not go live within 10 minutes; not shared. Use the "Share a post to LinkedIn" action later.`);
-		failures++;
-		continue;
+	if (!flag('no-wait')) {
+		const live = await checkLive(payload.postUrl, opt('post') ? 1 : 40);
+		console.log(`Page check: ${live.state} (${live.detail})`);
+		if (live.state === 'missing') {
+			console.log(`::error::${payload.postUrl} returns ${live.detail}: the site hasn't been rebuilt with this post. Check that the latest "Deploy to GitHub Pages" run succeeded, then run "Share a post to LinkedIn" again. Not shared.`);
+			failures++;
+			continue;
+		}
+		if (live.state === 'unreachable') {
+			console.log(`::error::Could not load ${payload.postUrl} (${live.detail}). Check the site is up, then run "Share a post to LinkedIn" again. Not shared.`);
+			failures++;
+			continue;
+		}
+		if (live.state === 'blocked') {
+			console.log(`::warning::The site refused GitHub's automated check (${live.detail}), probably bot protection on your domain. Sharing anyway. If LinkedIn's link preview is missing, allow LinkedIn's crawler (LinkedInBot) in your domain's bot settings.`);
+		}
 	}
 	const r = await fetch(webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
 	if (r.ok) console.log('Sent to Make for LinkedIn.');
