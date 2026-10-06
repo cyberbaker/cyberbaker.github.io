@@ -18,11 +18,14 @@ const blog = defineCollection({
 			track: z.enum(['everyday', 'deep-dive']).optional(),
 			tags: z.array(z.string()).default([]),
 			sources: z
-				.array(z.object({ title: z.string(), url: z.string().url(), publisher: z.string().optional() }))
+				.array(z.object({ title: z.string(), url: z.string().url().optional(), publisher: z.string().optional() }))
 				.default([]),
 			// Drafts are committed to the repo but never built into the site.
 			draft: z.boolean().default(false),
 			aiAssisted: z.boolean().default(false),
+			// LinkedIn post text and hashtags, written by the pipeline and shared when the post is published.
+			linkedin: z.string().optional(),
+			linkedinHashtags: z.array(z.string()).default([]),
 		}),
 });
 

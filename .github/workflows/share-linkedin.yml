@@ -1,0 +1,24 @@
+name: Share a post to LinkedIn
+
+# Run by hand from the Actions tab: shares any published post to LinkedIn via the Make.com scenario.
+# Useful for posts published before automatic sharing existed, or if an automatic share failed.
+on:
+  workflow_dispatch:
+    inputs:
+      post:
+        description: "Post file name without .md, e.g. 2026-09-24-shinyhunters-claims-fbi-breach (it is the last part of the post's URL)"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  share:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Share to LinkedIn
+        run: node scripts/share-to-linkedin.mjs --post "$POST"
+        env:
+          POST: ${{ inputs.post }}
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}

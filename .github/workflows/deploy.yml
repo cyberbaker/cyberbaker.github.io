@@ -29,3 +29,18 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+  # When you approve a held draft (change `draft: true` to `draft: false` and commit), share it to
+  # LinkedIn via the Make.com scenario once the site is live. Posts n8n publishes itself are skipped,
+  # because n8n has already shared them.
+  linkedin:
+    needs: deploy
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Share newly approved posts
+        run: node scripts/share-to-linkedin.mjs --before "${{ github.event.before }}" --after "${{ github.sha }}"
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}

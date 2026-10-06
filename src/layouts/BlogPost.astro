@@ -87,9 +87,13 @@ const section = track
 						<ol>
 							{sources.map((s) => (
 								<li>
-									<a href={s.url} rel="noopener" target="_blank">
-										{s.title}
-									</a>
+									{s.url ? (
+										<a href={s.url} rel="noopener" target="_blank">
+											{s.title}
+										</a>
+									) : (
+										<span>{s.title}</span>
+									)}
 									{s.publisher && <span class="publisher">{s.publisher}</span>}
 								</li>
 							))}
