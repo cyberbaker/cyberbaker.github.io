@@ -11,7 +11,7 @@ sources:
 aiAssisted: true
 linkedin: "Attackers hijacked the ASOS notification system to send extortion messages directly to thousands of customers via mobile push notifications.\n\nBy breaching the company's cloud infrastructure and targeting the Snowflake data platform, the attackers gained enough control to use legitimate business tools for their ransom demands. They used Telegram to communicate with the company's IT and data protection teams.\n\nThis incident shows how a breach in a third-party cloud service or a secondary notification system can be used to target end users directly. If your organisation uses Snowflake or relies on push notifications, the methods used here are relevant to your security.\n\n→ Rotate all API keys and credentials immediately if you detect unusual activity.\n→ Implement multi-factor authentication on all notification systems.\n→ Apply least-privilege access controls to cloud environments.\n\nRead the full analysis here."
 linkedinHashtags: ["CyberSecurity", "DataBreach", "CloudSecurity", "InfoSec"]
-draft: true
+draft: false
 ---
 On 6 October 2026, reports emerged that the clothing retailer ASOS experienced a significant breach of its cloud infrastructure. The attackers managed to hijack the company's notification system to send direct messages to thousands of app users. These messages, written in both English and Hebrew, claimed the attackers had achieved "full compromise" of the Snowflake data platform used by the company. The attackers used these notifications to demand that the ASOS Data Protection Officer (DPO) and IT team contact them via Telegram to prevent a data leak.
 
