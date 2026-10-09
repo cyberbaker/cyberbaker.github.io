@@ -17,7 +17,7 @@ sources:
 aiAssisted: true
 linkedin: "Hackers have accessed detailed profiles for potentially millions of ASOS customers, including names, addresses, phone numbers and dates of birth.\n\nThe breach occurred after attackers used social engineering to trick an employee into revealing their login credentials. This allowed the group to access information stored on third-party platforms and even send unauthorised push notifications through the ASOS mobile app.\n\nWhile passwords and payment details were not taken, the stolen information makes you a target for highly convincing impersonation scams. Scammers can use your specific shopping habits or personal details to make fraudulent messages look legitimate.\n\n→ Change your passwords as a precaution\n→ Be wary of unexpected messages or calls claiming to be from ASOS\n→ Monitor your bank and credit card statements for unusual activity\n\nRead the full article for more details."
 linkedinHashtags: ["ASOS", "DataBreach", "CyberSecurity", "ConsumerProtection"]
-draft: true
+draft: false
 ---
 A customer named Harriet, who has used ASOS since 2019, described the breach as "very unsettling". The data stolen from her profile included more than just a name; it contained specific details about her shopping habits, such as her search terms for "reclaimed vintage" and "Asos petite".
 
