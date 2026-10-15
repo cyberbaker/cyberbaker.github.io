@@ -11,7 +11,7 @@ sources:
 aiAssisted: true
 linkedin: "Attackers are using a flaw in Ivanti Connect Secure to enter networks without needing any valid usernames or passwords.\n\nThis vulnerability, tracked as CVE-2026-104935, allows remote actors to spoof identity signals and run unauthorised commands on the appliance. Because the attack bypasses the standard login path, existing security measures are unable to stop it. \n\nThis is a significant risk for any organisation using these appliances for remote access. Once an attacker gains a foothold on the device, they can monitor network traffic or move deeper into your internal systems.\n\n→ Check your Ivanti Connect Secure version immediately\n→ Apply the relevant patches for your software branch\n→ Monitor for unusual outbound traffic or unauthorised configuration changes\n\nRead the full breakdown here."
 linkedinHashtags: ["CyberSecurity", "Ivanti", "InfoSec", "VulnerabilityManagement"]
-draft: true
+draft: false
 ---
 Attackers are using a vulnerability in Ivanti Connect Secure appliances to gain access to networks without needing valid user accounts. Once they bypass the login process, they can execute arbitrary commands (instructions that allow an attacker to run any code they choose) on the device itself. This flaw is particularly serious because it allows attackers to circumvent the standard security checks designed to verify a user's identity.
 
