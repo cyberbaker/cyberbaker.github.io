@@ -11,7 +11,7 @@ sources:
 aiAssisted: true
 linkedin: "A ransomware attack on two Welsh organisations has resulted in the theft of personal data belonging to 3,300 people, most of whom are children.\n\nThe Information Commissioner’s Office has issued formal reprimands to Ogi Networks Limited and Data Cymru following the incident. Because the stolen information includes permanent details like names and dates of birth, the risk of identity theft for these children could last for years.\n\nThis case shows that even when a breach does not lead to a financial fine, the regulatory consequences and loss of trust are significant. For businesses, it is a reminder that protecting sensitive data is a legal requirement.\n\n→ Use a password manager to create unique credentials\n→ Enable multi-factor authentication on all accounts\n→ Update your software immediately to patch security holes\n\nRead the full article here."
 linkedinHashtags: ["CyberSecurity", "DataBreach", "Wales", "Privacy"]
-draft: true
+draft: false
 ---
 The personal data of 3,300 individuals, most of whom are children, has been stolen following a ransomware attack on two Welsh organisations. The breach has led to formal reprimands for the companies involved.
 
