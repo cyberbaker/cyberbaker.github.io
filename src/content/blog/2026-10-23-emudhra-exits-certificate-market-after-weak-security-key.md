@@ -14,7 +14,7 @@ sources:
 aiAssisted: true
 linkedin: "One of the private keys used to secure digital identities at eMudhra was simply the number four.\n\nA technical error during a key generation ceremony meant that instead of complex, unpredictable numbers, the company issued incredibly weak keys. This mistake went undetected for 18 months and survived two independent audits before a researcher found the flaw.\n\nThis matters because these keys are used to verify the authenticity of websites and software. If exploited, an attacker could impersonate legitimate websites to steal login details or financial information. The error affected many products, including web browsers and programming tools.\n\n→ Keep all your software and web browsers updated to the latest versions.\n→ Ensure developers update all libraries and dependencies like Python or Node.js.\n→ Use security providers with long histories of transparent audits.\n\nRead the full article here:"
 linkedinHashtags: ["CyberSecurity", "TechNews", "DataSecurity", "SoftwareUpdate"]
-draft: true
+draft: false
 ---
 One of the private keys used to secure digital identities at the Indian technology company eMudhra was simply the number four. Instead of a complex, massive number that would take a computer lifetimes to guess, the key was so small it could be identified in less than a second.
 
