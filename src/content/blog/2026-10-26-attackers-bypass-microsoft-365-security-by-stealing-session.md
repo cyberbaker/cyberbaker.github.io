@@ -11,7 +11,7 @@ sources:
 aiAssisted: true
 linkedin: "Attackers successfully accessed nearly 500 Microsoft 365 accounts by stealing digital session tokens instead of cracking passwords.\n\nUsing a technique called adversary-in-the-middle, criminals intercepted login information and multi-factor authentication codes in real time. This allowed them to impersonate legitimate users and bypass standard security layers.\n\nOnce inside, the attackers modified account settings to maintain access and used compromised mailboxes to send fraudulent payroll emails. This puts businesses at risk of financial fraud and identity theft.\n\n→ Revoke all active sessions and reset user passwords immediately.\n→ Check account settings for unauthorised devices or new mobile numbers.\n→ Review inbox rules to ensure attackers haven't hidden incoming emails.\n\nRead the full article for more details."
 linkedinHashtags: ["Microsoft365", "CyberSecurity", "BusinessSecurity", "Phishing"]
-draft: true
+draft: false
 ---
 Attackers successfully accessed 497 Microsoft 365 accounts by using stolen digital keys rather than cracking passwords. This allowed them to bypass multi-factor authentication (MFA), the security layer that usually requires a code from a mobile phone to prove your identity.
 
