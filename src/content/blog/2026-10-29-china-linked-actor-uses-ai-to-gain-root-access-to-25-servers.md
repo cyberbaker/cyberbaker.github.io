@@ -11,7 +11,7 @@ sources:
 aiAssisted: true
 linkedin: "A suspected China-based threat actor used AI-assisted techniques to gain full root access to 25 servers.\n\nBy combining PHP2Shell vulnerabilities with kernel privilege escalation, the attacker moved from an initial web breach to total system control. One of the compromised environments was a network affiliated with the US government.\n\nThis incident shows how attackers are using AI to orchestrate complex, multi-stage exploits. For those managing web servers, the risk is that these automated techniques can help attackers bypass security boundaries more effectively than traditional methods.\n\n→ Audit all web-facing PHP applications for known vulnerabilities\n→ Apply operating system kernel updates immediately\n→ Implement the principle of least privilege for web applications\n\nRead the full analysis here."
 linkedinHashtags: ["CyberSecurity", "AI", "InfoSec", "ServerSecurity"]
-draft: true
+draft: false
 ---
 On 25 October 2026, researchers observed a sophisticated cyber attack attributed to a suspected China-nexus threat actor (a group operating from or on behalf of China). The attacker used artificial intelligence (AI) to assist in an operation that successfully gained full control over 25 servers. One of the compromised environments included a network affiliated with the US government. By combining specific software vulnerabilities with techniques to gain administrative rights, the actor was able to "root" these systems, meaning they obtained the highest possible level of access.
 
