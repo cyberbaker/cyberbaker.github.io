@@ -11,7 +11,7 @@ sources:
 aiAssisted: true
 linkedin: "Unauthenticated attackers can bypass security checks and run unauthorised code on servers using Langflow.\n\nIBM has identified two critical flaws in the Langflow open-source tool used for building AI agents. These vulnerabilities allow anyone with network access to skip the login process and execute commands on the host system.\n\nFor organisations integrating AI into their workflows, this presents a risk to both system integrity and business continuity. If an attacker gains control of the server, they can disrupt automated processes or move further into your network.\n\n→ Update Langflow to version 1.13.0 immediately\n→ Restrict network access to prevent public internet exposure\n→ Audit all environments for legacy versions of the software\n\nRead the full analysis here."
 linkedinHashtags: ["CyberSecurity", "AI", "InfoSec", "SoftwareSecurity"]
-draft: true
+draft: false
 ---
 IBM reported last week that two critical flaws have been identified in Langflow, an open-source tool used for building AI agents (software designed to perform specific tasks using artificial intelligence) and workflows. These vulnerabilities are significant because they could allow a remote attacker to access the system without needing an account. Once they have bypassed authentication (the process of verifying a user's identity), they could potentially execute arbitrary code (running any command or programme of their choosing) on the servers where Langflow is hosted.
 
