@@ -11,7 +11,7 @@ sources:
 aiAssisted: true
 linkedin: "Visiting a compromised website was enough to trigger an exploit on some mobile devices without any user interaction.\n\nResearchers at Sekoia have linked a large-scale campaign to the Russian group APT29. The attackers used a watering hole strategy, compromising legitimate sites and using fake lookalike domains to target iOS and Android users. By exploiting known vulnerabilities, they could harvest sensitive data including WhatsApp databases, location history, and browser credentials.\n\nWhile the malicious activity stops when a device is rebooted, the risk returns if the user visits a compromised site again. This makes keeping software up to date the most effective way to prevent these specific exploits from working.\n\n→ Update all iOS and Android devices with the latest security patches\n→ Ensure Chrome on Android is running the most recent version\n→ Restart devices if you suspect you have visited a suspicious site\n\nRead the full report here."
 linkedinHashtags: ["CyberSecurity", "MobileSecurity", "APT29", "InfoSec"]
-draft: true
+draft: false
 ---
 Researchers at Sekoia have identified a large-scale mobile attack campaign attributed with moderate-to-high confidence to APT29 (also known as Midnight Blizzard), a Russian threat group. The attackers used a watering hole strategy, which involves compromising legitimate websites that target specific groups to infect the visitors. By infecting these sites, the group could target iOS and Android users without requiring them to click on suspicious links or download files manually.
 
