@@ -11,7 +11,7 @@ sources:
 aiAssisted: true
 linkedin: "A data breach involving the Equipple school app has affected almost 50,000 people in Northern Ireland.\n\nWhile it is not yet confirmed exactly what data was stolen, the incident may lead to scammers using specific details to target parents. If an attacker knows which school your child attends, they can make fraudulent emails or phone calls appear much more convincing.\n\nThis type of social engineering relies on building trust through personal context. Scammers might pose as school staff or app representatives to trick you into clicking malicious links or sharing sensitive information.\n\n→ Verify any unexpected messages by contacting your school directly through a trusted number.\n→ Do not click links in unsolicited texts or emails.\n→ Report suspicious texts by forwarding them to 7726.\n\nRead the full article for more details."
 linkedinHashtags: ["NorthernIreland", "DataBreach", "OnlineSafety", "SchoolSecurity"]
-draft: true
+draft: false
 ---
 Parents in Northern Ireland are being advised to watch for unexpected emails or phone calls following a data breach involving a school communication app.
 
