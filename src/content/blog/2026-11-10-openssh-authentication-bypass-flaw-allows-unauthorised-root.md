@@ -11,7 +11,7 @@ sources:
 aiAssisted: true
 linkedin: "Attackers can bypass OpenSSH authentication to gain root access on specific Linux systems by providing a password longer than 256 characters.\n\nThis flaw, tracked as CVE-2026-123158, affects distributions like Alpine, OpenWrt, and Yocto when they use the musl libc implementation with PAM disabled. Automated botnets and crypto miners are already using this exploit to target systems.\n\nIf your organisation uses lightweight Linux for containers, IoT, or embedded devices, you may be at risk of unauthorised access or resource theft. \n\n→ Update OpenSSH to version 10.6p2 immediately\n→ Disable password authentication where possible\n→ Review system logs for suspicious login attempts\n\nRead the full analysis here."
 linkedinHashtags: ["OpenSSH", "LinuxSecurity", "Vulnerability", "InfoSec"]
-draft: true
+draft: false
 ---
 Threat actors are currently exploiting a high-severity authentication bypass vulnerability in OpenSSH, a widely used tool for secure remote access to computers. Known as 'SSHole' and tracked as CVE-2026-123158, this flaw allows attackers to bypass standard login procedures and gain unauthorised access to systems. This is particularly dangerous because it can grant access to highly privileged accounts, such as 'root', which typically does not allow password-based logins.
 
