@@ -11,7 +11,7 @@ sources:
 aiAssisted: true
 linkedin: "Unauthorised parties have accessed the personal data of approximately 265,000 Oyster photocard users.\n\nTransport for London reported that a breach on their photocard website exposed names, addresses, phone numbers, and dates of birth. Most concerningly, the attackers also accessed answers to security questions used for identity verification.\n\nThis matters because criminals can use these answers to bypass security on your other accounts, such as banking or email. It also makes you a target for more convincing identity theft and fraud attempts.\n\n→ Change the answers to your security questions on other websites\n→ Monitor your bank statements for any unusual transactions\n→ Treat unexpected emails or texts asking for personal details with suspicion\n\nRead the full article for more details."
 linkedinHashtags: ["CyberSecurity", "DataBreach", "TfL", "IdentityTheft", "London"]
-draft: true
+draft: false
 ---
 Approximately 265,000 people who use Oyster photocards for travel in London have had their personal information accessed by unauthorised parties. This includes sensitive details such as home addresses, phone numbers, and even the answers to security questions used to verify identities.
 
