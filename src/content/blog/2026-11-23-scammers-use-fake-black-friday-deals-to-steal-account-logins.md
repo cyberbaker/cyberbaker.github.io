@@ -11,7 +11,7 @@ sources:
 aiAssisted: true
 linkedin: "Scammers began posting fake Black Friday deals on 1 September, over a month earlier than last year.\n\nAttackers are using reputable platforms like Google Sites and GitHub to host fraudulent pages. This makes the links look legitimate and helps them bypass traditional security checks. Many of these scams are found within Facebook groups, where users often trust posts more readily.\n\nFor individuals, these sites are often designed to steal logins for software, travel, or financial accounts. For businesses, brand impersonation can lead to stolen customer credentials and reputational damage.\n\n→ Visit official websites directly instead of clicking links in social media posts.\n→ Use multi-factor authentication to protect your accounts.\n→ Treat unusually high discounts on software or travel with suspicion.\n\nRead the full article for more details."
 linkedinHashtags: ["BlackFriday", "OnlineSafety", "FraudPrevention", "CyberSecurity"]
-draft: true
+draft: false
 ---
 Scammers began posting fake deals as early as 1 September this year, more than a month earlier than they did last year. Many of these fraudulent posts do not even mention Black Friday, making them harder to spot using traditional methods.
 
